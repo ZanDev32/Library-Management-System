@@ -1,0 +1,55 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #111827;
+  background: #f9fafb;
+}
+
+body, html, #root {
+  margin: 0;
+  min-height: 100%;
+}
+
+.app-shell {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  padding: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+input, select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+.error {
+  color: #b91c1c;
+  margin-top: 1rem;
+}
