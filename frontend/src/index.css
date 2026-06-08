@@ -1,0 +1,232 @@
+/* Academic Clean Theme Variables */
+:root {
+  --primary-color: #2c3e50; /* Dark blue/slate */
+  --secondary-color: #800000; /* Maroon accent */
+  --bg-color: #f8f9fa; /* Light gray background */
+  --surface-color: #ffffff; /* White card surface */
+  --text-color: #333333;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --radius: 8px;
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Micro-animations */
+.smooth-transition {
+  transition: all 0.3s ease;
+}
+
+/* Librarian Dashboard Layout (Sidebar & Widget) */
+.librarian-dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-sidebar {
+  width: 250px;
+  background-color: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 30px;
+  background-color: var(--bg-color);
+}
+
+.metrics-widget {
+  background-color: var(--bg-color);
+  padding: 15px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.metrics-widget h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.metrics-widget p {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  color: var(--secondary-color);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: var(--primary-color);
+}
+
+.tab-btn.active {
+  color: var(--primary-color);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--primary-color);
+  border-radius: 3px 3px 0 0;
+}
+
+/* Tables (Academic Clean) */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--surface-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.data-table th, .data-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+  background-color: var(--bg-color);
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.data-table tr:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+
+/* Buttons */
+.btn-primary, .btn-secondary, .btn-danger, .btn-success {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+.btn-primary:hover:not(:disabled) { background-color: #1a252f; }
+
+.btn-secondary {
+  background-color: var(--text-muted);
+  color: white;
+}
+.btn-secondary:hover:not(:disabled) { background-color: #495057; }
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+.btn-danger:hover:not(:disabled) { background-color: #bd2130; }
+
+.btn-success {
+  background-color: var(--success-color);
+  color: white;
+}
+.btn-success:hover:not(:disabled) { background-color: #1e7e34; }
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--surface-color);
+  padding: 30px;
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--shadow-md);
+}
+
+.actions-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Mobile Responsiveness: Hidden Columns Strategy */
+@media (max-width: 768px) {
+  /* Stack Dashboard Sidebar */
+  .librarian-dashboard {
+    flex-direction: column;
+  }
+  
+  .dashboard-sidebar {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .metrics-widget {
+    flex: 1 1 30%;
+    min-width: 100px;
+  }
+  
+  /* Hide specific columns */
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+  }
+}

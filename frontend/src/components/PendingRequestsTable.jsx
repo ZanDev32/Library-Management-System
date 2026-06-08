@@ -93,7 +93,7 @@ export default function PendingRequestsTable({ requests, onProcessComplete }) {
             <th>ID</th>
             <th>Mahasiswa</th>
             <th>Buku</th>
-            <th>Tanggal Request</th>
+            <th className="hide-on-mobile">Tanggal Request</th>
           </tr>
         </thead>
         <tbody>
@@ -109,7 +109,7 @@ export default function PendingRequestsTable({ requests, onProcessComplete }) {
               <td>{req.id}</td>
               <td>{req.user_name || `User #${req.user_id}`}</td>
               <td>{req.book_title || `Book #${req.book_id}`}</td>
-              <td>{new Date(req.request_date).toLocaleDateString('id-ID')}</td>
+              <td className="hide-on-mobile">{new Date(req.request_date).toLocaleDateString('id-ID')}</td>
             </tr>
           ))}
         </tbody>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PendingRequestsTable from '../components/PendingRequestsTable';
 import ActiveLoansTable from '../components/ActiveLoansTable';
 import QRScanner from '../components/QRScanner';
+import '../index.css';
 
 /**
  * LibrarianDashboard — Main dashboard for librarians to manage borrowing.
@@ -14,7 +15,7 @@ export default function LibrarianDashboard() {
 
   useEffect(() => {
     fetchData();
-  }, [activeTab]);
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
@@ -41,58 +42,80 @@ export default function LibrarianDashboard() {
   };
 
   const pendingRequests = requests.filter(r => r.status === 'PENDING');
-  const activeLoans = requests.filter(r => ['APPROVED', 'PICKED_UP', 'OVERDUE'].includes(r.status));
+  const activeLoans = requests.filter(r => ['APPROVED', 'PICKED_UP'].includes(r.status));
+  const overdueLoans = requests.filter(r => r.status === 'OVERDUE');
+  
+  // Also calculate from activeLoans if overdue logic relies on due_date dynamically, but usually status = OVERDUE
+  const totalActive = activeLoans.length + overdueLoans.length;
 
   return (
     <div className="librarian-dashboard">
-      <h1>Dashboard Pustakawan</h1>
-      
-      <div className="tabs">
-        <button 
-          className={`tab-btn ${activeTab === 'PENDING' ? 'active' : ''}`}
-          onClick={() => setActiveTab('PENDING')}
-        >
-          Permintaan Pending ({pendingRequests.length})
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'ACTIVE' ? 'active' : ''}`}
-          onClick={() => setActiveTab('ACTIVE')}
-        >
-          Pinjaman Aktif ({activeLoans.length})
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'SCANNER' ? 'active' : ''}`}
-          onClick={() => setActiveTab('SCANNER')}
-        >
-          Scanner Pengembalian
-        </button>
-      </div>
+      <aside className="dashboard-sidebar">
+        <h2>Perpustakaan</h2>
+        <div className="metrics-widget smooth-transition">
+          <h3>Pending</h3>
+          <p>{pendingRequests.length}</p>
+        </div>
+        <div className="metrics-widget smooth-transition">
+          <h3>Aktif</h3>
+          <p>{totalActive}</p>
+        </div>
+        <div className="metrics-widget smooth-transition" style={{ borderColor: 'var(--danger-color)' }}>
+          <h3 style={{ color: 'var(--danger-color)' }}>Overdue</h3>
+          <p style={{ color: 'var(--danger-color)' }}>{overdueLoans.length}</p>
+        </div>
+      </aside>
 
-      <div className="tab-content">
-        {loading ? (
-          <p>Memuat data...</p>
-        ) : error ? (
-          <p className="error-text">{error}</p>
-        ) : (
-          <>
-            {activeTab === 'PENDING' && (
-              <PendingRequestsTable 
-                requests={pendingRequests} 
-                onProcessComplete={fetchData} 
-              />
-            )}
-            {activeTab === 'ACTIVE' && (
-              <ActiveLoansTable 
-                loans={activeLoans} 
-                onStatusChange={fetchData} 
-              />
-            )}
-            {activeTab === 'SCANNER' && (
-              <QRScanner onScanSuccess={fetchData} />
-            )}
-          </>
-        )}
-      </div>
+      <main className="dashboard-main">
+        <h1>Dashboard Pustakawan</h1>
+        
+        <div className="tabs">
+          <button 
+            className={`tab-btn smooth-transition ${activeTab === 'PENDING' ? 'active' : ''}`}
+            onClick={() => setActiveTab('PENDING')}
+          >
+            Permintaan ({pendingRequests.length})
+          </button>
+          <button 
+            className={`tab-btn smooth-transition ${activeTab === 'ACTIVE' ? 'active' : ''}`}
+            onClick={() => setActiveTab('ACTIVE')}
+          >
+            Pinjaman Aktif ({totalActive})
+          </button>
+          <button 
+            className={`tab-btn smooth-transition ${activeTab === 'SCANNER' ? 'active' : ''}`}
+            onClick={() => setActiveTab('SCANNER')}
+          >
+            Scanner
+          </button>
+        </div>
+
+        <div className="tab-content smooth-transition">
+          {loading ? (
+            <p>Memuat data...</p>
+          ) : error ? (
+            <p className="error-text">{error}</p>
+          ) : (
+            <>
+              {activeTab === 'PENDING' && (
+                <PendingRequestsTable 
+                  requests={pendingRequests} 
+                  onProcessComplete={fetchData} 
+                />
+              )}
+              {activeTab === 'ACTIVE' && (
+                <ActiveLoansTable 
+                  loans={activeLoans.concat(overdueLoans)} 
+                  onStatusChange={fetchData} 
+                />
+              )}
+              {activeTab === 'SCANNER' && (
+                <QRScanner onScanSuccess={fetchData} />
+              )}
+            </>
+          )}
+        </div>
+      </main>
     </div>
   );
 }

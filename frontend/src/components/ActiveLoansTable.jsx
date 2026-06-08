@@ -29,7 +29,7 @@ export default function ActiveLoansTable({ loans, onStatusChange }) {
             <th>Mahasiswa</th>
             <th>Buku</th>
             <th>Status</th>
-            <th>Batas Ambil</th>
+            <th className="hide-on-mobile">Batas Ambil</th>
             <th>Jatuh Tempo</th>
             <th>Aksi</th>
           </tr>
@@ -45,7 +45,7 @@ export default function ActiveLoansTable({ loans, onStatusChange }) {
                   {loan.status}
                 </span>
               </td>
-              <td>{loan.pickup_deadline ? new Date(loan.pickup_deadline).toLocaleDateString('id-ID') : '-'}</td>
+              <td className="hide-on-mobile">{loan.pickup_deadline ? new Date(loan.pickup_deadline).toLocaleDateString('id-ID') : '-'}</td>
               <td>{loan.due_date ? new Date(loan.due_date).toLocaleDateString('id-ID') : '-'}</td>
               <td>
                 {loan.status === 'APPROVED' && (
