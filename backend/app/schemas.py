@@ -12,15 +12,17 @@ class UserCreate(BaseModel):
     password: str
     role: Role
 
+from datetime import datetime
+
 class UserResponse(BaseModel):
     id: int
     name: str
     email: EmailStr
     role: Role
-    created_at: Optional[str]
+    created_at: Optional[datetime]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str

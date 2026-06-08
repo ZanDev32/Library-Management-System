@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 
-from .database import engine, get_db
+from .database import engine, ensure_database_exists, get_db
 from .models import Base
 from .schemas import UserCreate, UserResponse, Token
 from .auth import (
@@ -35,6 +35,7 @@ app.add_middleware(
 
 @app.on_event('startup')
 async def on_startup():
+    await ensure_database_exists()
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
