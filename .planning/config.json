@@ -1,0 +1,21 @@
+{
+  "projectName": "Library Management System (LMS)",
+  "workflow": "new-project",
+  "phase": "1",
+  "stack": {
+    "backend": "FastAPI",
+    "frontend": "React",
+    "database": "PostgreSQL",
+    "deployment": "Docker Compose"
+  },
+  "auth": {
+    "mechanism": "JWT",
+    "roles": ["student", "librarian"]
+  },
+  "preferences": {
+    "autoMode": false,
+    "requireValidation": true,
+    "defaultBranch": "main"
+  },
+  "created": "2026-06-08"
+}
