@@ -1,0 +1,54 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 666B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 248B 0.1s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 1.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 757B 0.0s done
+#5 DONE 0.1s
+
+#6 [1/5] FROM docker.io/library/python:3.12-slim@sha256:090ba77e2958f6af52a5341f788b50b032dd4ca28377d2893dcf1ecbdfdfe203
+#6 resolve docker.io/library/python:3.12-slim@sha256:090ba77e2958f6af52a5341f788b50b032dd4ca28377d2893dcf1ecbdfdfe203 0.1s done
+#6 DONE 0.1s
+
+#7 [2/5] WORKDIR /app
+#7 CACHED
+
+#8 [3/5] COPY requirements.txt .
+#8 CACHED
+
+#9 [4/5] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [5/5] COPY . .
+#10 CACHED
+
+#11 exporting to image
+#11 exporting layers 0.0s done
+#11 exporting manifest sha256:61954a905558a9c5fc0639d6d3caba00bccf6d851287388b9faac7b469bdb666 done
+#11 exporting config sha256:de793d7c986adfe89ff0496b4e4977fa39dcaf4c0a63f28e90c377aac95f5e2d done
+#11 exporting attestation manifest sha256:5fad9b562cb5e119eada882a011d5deec616eb7d0d74168180c9dd52fddee256 0.0s done
+#11 exporting manifest list sha256:d9531f7d74e8f05d0f2d38c266efb9ef00835f71f366f1d3f7446d239d5654c8 0.0s done
+#11 naming to docker.io/library/library-management-system-backend:latest done
+#11 unpacking to docker.io/library/library-management-system-backend:latest
+#11 unpacking to docker.io/library/library-management-system-backend:latest 0.0s done
+#11 DONE 0.2s
+
+#12 resolving provenance for metadata file
+#12 DONE 0.1s
+ library-management-system-backend  Built
+ Container library-management-system-db-1  Running
+ Container library-management-system-backend-1  Recreate
+ Container library-management-system-backend-1  Recreated
+ Container library-management-system-backend-1  Starting
+ Container library-management-system-backend-1  Started

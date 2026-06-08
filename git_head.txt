@@ -1,0 +1,1 @@
+c2376b2 Phase 1 auth: fix bcrypt compatibility, schema validation, and add auth UAT docs

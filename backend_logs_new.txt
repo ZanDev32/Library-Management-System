@@ -1,0 +1,117 @@
+backend-1  | INFO:     Will watch for changes in these directories: ['/app']
+backend-1  | /usr/local/lib/python3.12/site-packages/pydantic/_internal/_config.py:386: UserWarning: Valid config keys have changed in V2:
+backend-1  | * 'orm_mode' has been renamed to 'from_attributes'
+backend-1  |   warnings.warn(message, UserWarning)
+backend-1  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+backend-1  | INFO:     Started reloader process [1] using WatchFiles
+backend-1  | /usr/local/lib/python3.12/site-packages/pydantic/_internal/_config.py:386: UserWarning: Valid config keys have changed in V2:
+backend-1  | * 'orm_mode' has been renamed to 'from_attributes'
+backend-1  |   warnings.warn(message, UserWarning)
+backend-1  | INFO:     Started server process [8]
+backend-1  | INFO:     Waiting for application startup.
+backend-1  | INFO:     Application startup complete.
+backend-1  | INFO:     172.24.0.1:57930 - "POST /auth/register HTTP/1.1" 500 Internal Server Error
+backend-1  | ERROR:    Exception in ASGI application
+backend-1  | Traceback (most recent call last):
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 421, in run_asgi
+backend-1  |     result = await app(  # type: ignore[func-returns-value]
+backend-1  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 62, in __call__
+backend-1  |     return await self.app(scope, receive, send)
+backend-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+backend-1  |     await super().__call__(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+backend-1  |     await self.middleware_stack(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+backend-1  |     raise exc
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+backend-1  |     await self.app(scope, receive, _send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/middleware/cors.py", line 88, in __call__
+backend-1  |     await self.app(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+backend-1  |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+backend-1  |     raise exc
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+backend-1  |     await app(scope, receive, sender)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+backend-1  |     await self.app(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+backend-1  |     await self.middleware_stack(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+backend-1  |     await route.handle(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+backend-1  |     await self.app(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+backend-1  |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+backend-1  |     raise exc
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+backend-1  |     await app(scope, receive, sender)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+backend-1  |     response = await f(request)
+backend-1  |                ^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 695, in app
+backend-1  |     content = await serialize_response(
+backend-1  |               ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 300, in serialize_response
+backend-1  |     raise ResponseValidationError(
+backend-1  | fastapi.exceptions.ResponseValidationError: 1 validation error:
+backend-1  |   {'type': 'string_type', 'loc': ('response', 'created_at'), 'msg': 'Input should be a valid string', 'input': datetime.datetime(2026, 6, 8, 14, 10, 47, 413865, tzinfo=datetime.timezone.utc)}
+backend-1  | 
+backend-1  |   File "/app/app/main.py", line 43, in register
+backend-1  |     POST /auth/register
+backend-1  | INFO:     172.24.0.1:57936 - "POST /auth/login HTTP/1.1" 200 OK
+backend-1  | INFO:     172.24.0.1:57940 - "GET /users/me HTTP/1.1" 500 Internal Server Error
+backend-1  | ERROR:    Exception in ASGI application
+backend-1  | Traceback (most recent call last):
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 421, in run_asgi
+backend-1  |     result = await app(  # type: ignore[func-returns-value]
+backend-1  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 62, in __call__
+backend-1  |     return await self.app(scope, receive, send)
+backend-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+backend-1  |     await super().__call__(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+backend-1  |     await self.middleware_stack(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+backend-1  |     raise exc
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+backend-1  |     await self.app(scope, receive, _send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/middleware/cors.py", line 88, in __call__
+backend-1  |     await self.app(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+backend-1  |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+backend-1  |     raise exc
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+backend-1  |     await app(scope, receive, sender)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+backend-1  |     await self.app(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+backend-1  |     await self.middleware_stack(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+backend-1  |     await route.handle(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+backend-1  |     await self.app(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+backend-1  |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+backend-1  |     raise exc
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+backend-1  |     await app(scope, receive, sender)
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+backend-1  |     response = await f(request)
+backend-1  |                ^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 695, in app
+backend-1  |     content = await serialize_response(
+backend-1  |               ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 300, in serialize_response
+backend-1  |     raise ResponseValidationError(
+backend-1  | fastapi.exceptions.ResponseValidationError: 1 validation error:
+backend-1  |   {'type': 'string_type', 'loc': ('response', 'created_at'), 'msg': 'Input should be a valid string', 'input': datetime.datetime(2026, 6, 8, 14, 10, 47, 413865, tzinfo=datetime.timezone.utc)}
+backend-1  | 
+backend-1  |   File "/app/app/main.py", line 64, in read_users_me
+backend-1  |     GET /users/me

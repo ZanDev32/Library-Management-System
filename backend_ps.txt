@@ -1,0 +1,4 @@
+NAME                                   IMAGE                                                                     COMMAND                  SERVICE    CREATED          STATUS          PORTS
+library-management-system-backend-1    library-management-system-backend                                         "uvicorn app.main:ap…"   backend    16 seconds ago   Up 10 seconds   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+library-management-system-db-1         postgres:15                                                               "docker-entrypoint.s…"   db         21 minutes ago   Up 21 minutes   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+library-management-system-frontend-1   sha256:435a94c5e7bf6c8c1cea30f3a430e8c409ce48f727e7aa8c05f143ae0b0a1eb6   "docker-entrypoint.s…"   frontend   17 minutes ago   Up 16 minutes   0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp

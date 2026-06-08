@@ -1,0 +1,174 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 666B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 248B 0.1s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 1.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 757B 0.1s done
+#5 DONE 0.1s
+
+#6 [1/5] FROM docker.io/library/python:3.12-slim@sha256:090ba77e2958f6af52a5341f788b50b032dd4ca28377d2893dcf1ecbdfdfe203
+#6 resolve docker.io/library/python:3.12-slim@sha256:090ba77e2958f6af52a5341f788b50b032dd4ca28377d2893dcf1ecbdfdfe203 0.1s done
+#6 DONE 0.1s
+
+#7 [2/5] WORKDIR /app
+#7 CACHED
+
+#8 [3/5] COPY requirements.txt .
+#8 CACHED
+
+#9 [4/5] RUN pip install --no-cache-dir -r requirements.txt
+#9 5.134 Collecting fastapi (from -r requirements.txt (line 1))
+#9 5.684   Downloading fastapi-0.136.3-py3-none-any.whl.metadata (27 kB)
+#9 5.849 Collecting asyncpg (from -r requirements.txt (line 4))
+#9 5.950   Downloading asyncpg-0.31.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (4.4 kB)
+#9 6.074 Collecting bcrypt<4 (from -r requirements.txt (line 7))
+#9 6.113   Downloading bcrypt-3.2.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl.metadata (8.3 kB)
+#9 6.182 Collecting python-multipart (from -r requirements.txt (line 8))
+#9 6.217   Downloading python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+#9 6.305 Collecting email-validator (from -r requirements.txt (line 9))
+#9 6.347   Downloading email_validator-2.3.0-py3-none-any.whl.metadata (26 kB)
+#9 6.592 Collecting psycopg2-binary (from -r requirements.txt (line 11))
+#9 6.627   Downloading psycopg2_binary-2.9.12-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+#9 6.689 Collecting uvicorn[standard] (from -r requirements.txt (line 2))
+#9 6.778   Downloading uvicorn-0.49.0-py3-none-any.whl.metadata (6.7 kB)
+#9 7.631 Collecting SQLAlchemy[asyncio] (from -r requirements.txt (line 3))
+#9 7.682   Downloading sqlalchemy-2.0.50-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (9.5 kB)
+#9 7.762 Collecting python-jose[cryptography] (from -r requirements.txt (line 5))
+#9 7.809   Downloading python_jose-3.5.0-py2.py3-none-any.whl.metadata (5.5 kB)
+#9 7.940 Collecting passlib[bcrypt] (from -r requirements.txt (line 6))
+#9 8.007   Downloading passlib-1.7.4-py2.py3-none-any.whl.metadata (1.7 kB)
+#9 8.291 Collecting pydantic[email] (from -r requirements.txt (line 10))
+#9 8.348   Downloading pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+#9 8.544 Collecting starlette>=0.46.0 (from fastapi->-r requirements.txt (line 1))
+#9 8.584   Downloading starlette-1.2.1-py3-none-any.whl.metadata (6.3 kB)
+#9 8.667 Collecting typing-extensions>=4.8.0 (from fastapi->-r requirements.txt (line 1))
+#9 8.748   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+#9 8.841 Collecting typing-inspection>=0.4.2 (from fastapi->-r requirements.txt (line 1))
+#9 8.877   Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+#9 8.923 Collecting annotated-doc>=0.0.2 (from fastapi->-r requirements.txt (line 1))
+#9 8.964   Downloading annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+#9 9.105 Collecting click>=7.0 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 9.165   Downloading click-8.4.1-py3-none-any.whl.metadata (2.6 kB)
+#9 9.217 Collecting h11>=0.8 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 9.251   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#9 9.325 Collecting httptools>=0.8.0 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 9.359   Downloading httptools-0.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (3.5 kB)
+#9 9.408 Collecting python-dotenv>=0.13 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 9.491   Downloading python_dotenv-1.2.2-py3-none-any.whl.metadata (27 kB)
+#9 9.612 Collecting pyyaml>=5.1 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 9.653   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+#9 9.748 Collecting uvloop>=0.15.1 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 9.785   Downloading uvloop-0.22.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (4.9 kB)
+#9 10.04 Collecting watchfiles>=0.20 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 10.15   Downloading watchfiles-1.2.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+#9 10.66 Collecting websockets>=10.4 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 10.74   Downloading websockets-16.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.8 kB)
+#9 11.18 Collecting greenlet>=1 (from SQLAlchemy[asyncio]->-r requirements.txt (line 3))
+#9 11.23   Downloading greenlet-3.5.1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+#9 11.29 Collecting ecdsa!=0.15 (from python-jose[cryptography]->-r requirements.txt (line 5))
+#9 11.39   Downloading ecdsa-0.19.2-py2.py3-none-any.whl.metadata (29 kB)
+#9 11.51 Collecting rsa!=4.1.1,!=4.4,<5.0,>=4.0 (from python-jose[cryptography]->-r requirements.txt (line 5))
+#9 11.56   Downloading rsa-4.9.1-py3-none-any.whl.metadata (5.6 kB)
+#9 11.68 Collecting pyasn1>=0.5.0 (from python-jose[cryptography]->-r requirements.txt (line 5))
+#9 11.71   Downloading pyasn1-0.6.3-py3-none-any.whl.metadata (8.4 kB)
+#9 12.16 Collecting cryptography>=3.4.0 (from python-jose[cryptography]->-r requirements.txt (line 5))
+#9 12.22   Downloading cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+#9 12.45 Collecting cffi>=1.1 (from bcrypt<4->-r requirements.txt (line 7))
+#9 12.48   Downloading cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+#9 12.53 Collecting dnspython>=2.0.0 (from email-validator->-r requirements.txt (line 9))
+#9 12.64   Downloading dnspython-2.8.0-py3-none-any.whl.metadata (5.7 kB)
+#9 12.73 Collecting idna>=2.0.0 (from email-validator->-r requirements.txt (line 9))
+#9 12.83   Downloading idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+#9 12.97 Collecting annotated-types>=0.6.0 (from pydantic[email]->-r requirements.txt (line 10))
+#9 13.04   Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+#9 14.65 Collecting pydantic-core==2.46.4 (from pydantic[email]->-r requirements.txt (line 10))
+#9 14.71   Downloading pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+#9 14.83 Collecting pycparser (from cffi>=1.1->bcrypt<4->-r requirements.txt (line 7))
+#9 14.90   Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+#9 15.00 Collecting six>=1.9.0 (from ecdsa!=0.15->python-jose[cryptography]->-r requirements.txt (line 5))
+#9 15.04   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#9 15.27 Collecting anyio<5,>=3.6.2 (from starlette>=0.46.0->fastapi->-r requirements.txt (line 1))
+#9 15.32   Downloading anyio-4.13.0-py3-none-any.whl.metadata (4.5 kB)
+#9 15.48 Downloading fastapi-0.136.3-py3-none-any.whl (117 kB)
+#9 15.65 Downloading asyncpg-0.31.0-cp312-cp312-manylinux_2_28_x86_64.whl (3.5 MB)
+#9 16.75    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.5/3.5 MB 3.4 MB/s eta 0:00:00
+#9 16.79 Downloading bcrypt-3.2.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl (62 kB)
+#9 16.89 Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+#9 16.93 Downloading email_validator-2.3.0-py3-none-any.whl (35 kB)
+#9 16.98 Downloading pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+#9 17.49    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 4.3 MB/s eta 0:00:00
+#9 17.55 Downloading psycopg2_binary-2.9.12-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.3 MB)
+#9 18.45    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 5.1 MB/s eta 0:00:00
+#9 18.49 Downloading annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+#9 18.54 Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+#9 18.58 Downloading cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (219 kB)
+#9 18.66 Downloading click-8.4.1-py3-none-any.whl (116 kB)
+#9 18.72 Downloading cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl (4.7 MB)
+#9 19.88    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 4.1 MB/s eta 0:00:00
+#9 19.91 Downloading dnspython-2.8.0-py3-none-any.whl (331 kB)
+#9 20.03 Downloading ecdsa-0.19.2-py2.py3-none-any.whl (150 kB)
+#9 20.20 Downloading greenlet-3.5.1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (611 kB)
+#9 20.31    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 611.4/611.4 kB 6.6 MB/s eta 0:00:00
+#9 20.35 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#9 20.44 Downloading httptools-0.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (523 kB)
+#9 20.77 Downloading idna-3.18-py3-none-any.whl (65 kB)
+#9 21.05 Downloading pyasn1-0.6.3-py3-none-any.whl (83 kB)
+#9 21.45 Downloading pydantic-2.13.4-py3-none-any.whl (472 kB)
+#9 21.91 Downloading python_dotenv-1.2.2-py3-none-any.whl (22 kB)
+#9 21.96 Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+#9 22.27    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 2.0 MB/s eta 0:00:00
+#9 22.30 Downloading rsa-4.9.1-py3-none-any.whl (34 kB)
+#9 22.42 Downloading starlette-1.2.1-py3-none-any.whl (73 kB)
+#9 22.58 Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+#9 22.63 Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+#9 22.76 Downloading uvloop-0.22.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (4.4 MB)
+#9 24.24    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.4/4.4 MB 3.0 MB/s eta 0:00:00
+#9 24.36 Downloading watchfiles-1.2.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (456 kB)
+#9 24.57 Downloading websockets-16.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (184 kB)
+#9 24.74 Downloading passlib-1.7.4-py2.py3-none-any.whl (525 kB)
+#9 24.84    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 525.6/525.6 kB 6.2 MB/s eta 0:00:00
+#9 24.91 Downloading python_jose-3.5.0-py2.py3-none-any.whl (34 kB)
+#9 24.95 Downloading sqlalchemy-2.0.50-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.4 MB)
+#9 25.85    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.4/3.4 MB 3.7 MB/s eta 0:00:00
+#9 25.89 Downloading uvicorn-0.49.0-py3-none-any.whl (71 kB)
+#9 26.04 Downloading anyio-4.13.0-py3-none-any.whl (114 kB)
+#9 26.24 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+#9 26.41 Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+#9 26.62 Installing collected packages: passlib, websockets, uvloop, typing-extensions, six, pyyaml, python-multipart, python-dotenv, pycparser, pyasn1, psycopg2-binary, idna, httptools, h11, greenlet, dnspython, click, asyncpg, annotated-types, annotated-doc, uvicorn, typing-inspection, SQLAlchemy, rsa, pydantic-core, email-validator, ecdsa, cffi, anyio, watchfiles, starlette, python-jose, pydantic, cryptography, bcrypt, fastapi
+#9 37.05 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#9 37.05 Successfully installed SQLAlchemy-2.0.50 annotated-doc-0.0.4 annotated-types-0.7.0 anyio-4.13.0 asyncpg-0.31.0 bcrypt-3.2.2 cffi-2.0.0 click-8.4.1 cryptography-48.0.0 dnspython-2.8.0 ecdsa-0.19.2 email-validator-2.3.0 fastapi-0.136.3 greenlet-3.5.1 h11-0.16.0 httptools-0.8.0 idna-3.18 passlib-1.7.4 psycopg2-binary-2.9.12 pyasn1-0.6.3 pycparser-3.0 pydantic-2.13.4 pydantic-core-2.46.4 python-dotenv-1.2.2 python-jose-3.5.0 python-multipart-0.0.32 pyyaml-6.0.3 rsa-4.9.1 six-1.17.0 starlette-1.2.1 typing-extensions-4.15.0 typing-inspection-0.4.2 uvicorn-0.49.0 uvloop-0.22.1 watchfiles-1.2.0 websockets-16.0
+#9 37.39 
+#9 37.39 [notice] A new release of pip is available: 25.0.1 -> 26.1.2
+#9 37.39 [notice] To update, run: pip install --upgrade pip
+#9 DONE 37.8s
+
+#10 [5/5] COPY . .
+#10 DONE 0.1s
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 9.3s done
+#11 exporting manifest sha256:61954a905558a9c5fc0639d6d3caba00bccf6d851287388b9faac7b469bdb666 0.0s done
+#11 exporting config sha256:de793d7c986adfe89ff0496b4e4977fa39dcaf4c0a63f28e90c377aac95f5e2d 0.0s done
+#11 exporting attestation manifest sha256:88cd4531507457b2f2341812e343b163302984bc5505a05a3c48f00184ee09f1 0.0s done
+#11 exporting manifest list sha256:8b020ed66c06693e63e1c2da334a05d7c837c3107f3c59e3709aae37d6b809aa
+#11 exporting manifest list sha256:8b020ed66c06693e63e1c2da334a05d7c837c3107f3c59e3709aae37d6b809aa 0.0s done
+#11 naming to docker.io/library/library-management-system-backend:latest done
+#11 unpacking to docker.io/library/library-management-system-backend:latest
+#11 unpacking to docker.io/library/library-management-system-backend:latest 3.4s done
+#11 DONE 13.1s
+
+#12 resolving provenance for metadata file
+#12 DONE 0.2s
+ library-management-system-backend  Built

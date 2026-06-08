@@ -1,0 +1,5 @@
+{
+  "register": "{\"id\":2,\"name\":\"Test User\",\"email\":\"uat_test_1780927908599@example.com\",\"role\":\"student\",\"created_at\":\"2026-06-08T14:11:48.776690Z\"}",
+  "login": "{\"access_token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1YXRfdGVzdF8xNzgwOTI3OTA4NTk5QGV4YW1wbGUuY29tIiwicm9sZSI6InN0dWRlbnQiLCJleHAiOjE3ODA5MzE1MDl9.5gk7tdQskbG9xxNpNxJ-z8kPJoqQ2DuMGXjj5uklJho\",\"token_type\":\"bearer\"}",
+  "profile": "{\"id\":2,\"name\":\"Test User\",\"email\":\"uat_test_1780927908599@example.com\",\"role\":\"student\",\"created_at\":\"2026-06-08T14:11:48.776690Z\"}"
+}
