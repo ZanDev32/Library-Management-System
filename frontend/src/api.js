@@ -59,6 +59,41 @@ export async function getCurrentUser() {
   }
 }
 
+export async function fetchBooks({ q, author, isbn, available, page, page_size }) {
+  const params = new URLSearchParams()
+  if (q) params.append('q', q)
+  if (author) params.append('author', author)
+  if (isbn) params.append('isbn', isbn)
+  if (available !== undefined && available !== null) params.append('available', available)
+  if (page) params.append('page', page)
+  if (page_size) params.append('page_size', page_size)
+  return await request(`/books?${params.toString()}`)
+}
+
+export async function getBook(id) {
+  return await request(`/books/${id}`)
+}
+
+export async function createBook(payload) {
+  return await request('/books', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function updateBook(id, payload) {
+  return await request(`/books/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function deleteBook(id) {
+  return await request(`/books/${id}`, {
+    method: 'DELETE',
+  })
+}
+
 export function logout() {
   localStorage.removeItem('access_token')
 }

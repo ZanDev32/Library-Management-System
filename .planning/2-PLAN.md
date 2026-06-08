@@ -1,31 +1,29 @@
 # Phase 2 Plan — Book Catalog
 
 ## Goal
-Menerapkan fitur katalog buku yang dapat dicari dan dikelola pustakawan, sesuai scope Phase 2 di ROADMAP.md.
+Deliver a book catalog that students can search and filter, and librarians can manage through CRUD operations.
 
 ## Scope
-- Pencarian katalog buku dengan relevansi fuzzy pada `title`, `author`, `ISBN`.
-- Filter `title`, `author`, `ISBN`, dan `availability`.
-- Tampilkan semua hasil secara default, termasuk buku yang tidak tersedia.
-- Label status ketersediaan yang jelas pada setiap entri buku.
-- CRUD pustakawan untuk buku (create/read/update/delete).
-- Hapus buku hanya dari halaman detail.
-- Form tambah/edit lengkap dengan metadata buku penting.
+- Search across `title`, `author`, and `ISBN` with relevance-aware matching.
+- Filter by `author`, `ISBN`, and availability.
+- Show unavailable books in results with clear availability labels.
+- Provide librarians with full book CRUD capabilities.
+- Keep book deletion limited to the detail page with explicit confirmation.
+- Capture full book metadata in add/edit forms.
 
 ## Success criteria
-- [ ] Search endpoint mengembalikan hasil relevan untuk query di `title`, `author`, dan `ISBN`.
-- [ ] Filter availability berfungsi dan dapat mempersempit hasil ke buku yang tersedia.
-- [ ] Semua hasil tampil termasuk buku tidak tersedia, dengan label status.
-- [ ] Pustakawan dapat membuat, mengedit, dan menghapus buku.
-- [ ] Delete hanya tersedia di halaman detail, dengan konfirmasi.
-- [ ] Data buku mencakup `title`, `author`, `ISBN`, `genre`, `publisher`, `publication_year`, dan `stock_count`.
-- [ ] Ketersediaan ditentukan oleh `stock_count` dan status eksplisit.
-- [ ] Student users hanya dapat melihat katalog dan detail buku.
+- [ ] `GET /books` returns relevant search results for `title`, `author`, and `ISBN`.
+- [ ] `available=true` filters to `stock_count > 0` books.
+- [ ] Unavailable books still appear in results and are labeled as unavailable.
+- [ ] Librarians can create, update, and delete book records.
+- [ ] Book deletion is only available from the detail page and requires confirmation.
+- [ ] Book data includes `title`, `author`, `ISBN`, `genre`, `publisher`, `publication_year`, and `stock_count`.
+- [ ] Students can only read catalog and detail pages; they cannot access write APIs.
 
-## Tasks
+## Implementation tasks
 
-### 1. Backend — Data model dan database
-- [ ] Definisikan tabel `books` dengan kolom:
+### 1. Backend — Book model and DB schema
+- [ ] Add `Book` model in `backend/app/models.py` with fields:
   - `id`
   - `title`
   - `author`
@@ -36,68 +34,75 @@ Menerapkan fitur katalog buku yang dapat dicari dan dikelola pustakawan, sesuai 
   - `stock_count`
   - `created_at`
   - `updated_at`
-- [ ] Tambahkan mekanisme ketersediaan: buku dianggap tersedia jika `stock_count > 0`.
-- [ ] Siapkan migration / schema SQL untuk PostgreSQL.
+- [ ] Use `stock_count > 0` to derive availability.
+- [ ] Add schema creation or migration logic to create `books` table.
 
-### 2. Backend — Search & filter API
-- [ ] Implementasikan `GET /books` dengan parameter:
+### 2. Backend — Catalog search and filter API
+- [ ] Implement `GET /books` in `backend/app/main.py` or a dedicated router.
+- [ ] Support query params:
   - `q`
   - `author`
   - `isbn`
   - `available`
   - `page`
   - `page_size`
-- [ ] Pastikan pencarian mendukung kecocokan fuzzy/relevansi dan tidak hanya exact match.
-- [ ] Urutkan hasil berdasarkan relevansi query, dengan fallback ke judul alfabetis.
-- [ ] Sertakan field ketersediaan dalam respons.
+- [ ] Compose SQLAlchemy queries so:
+  - `q` searches `title`, `author`, and `isbn` case-insensitively.
+  - `author` and `isbn` filters narrow the result set.
+  - `available=true` returns only available books.
+- [ ] Return availability metadata and pagination info.
 
 ### 3. Backend — Book CRUD API
-- [ ] Implementasikan `POST /books` untuk menambahkan buku baru.
-- [ ] Implementasikan `GET /books/{book_id}` untuk detail buku.
-- [ ] Implementasikan `PUT /books/{book_id}` untuk memperbarui metadata buku.
-- [ ] Implementasikan `DELETE /books/{book_id}` untuk menghapus buku.
-- [ ] Lindungi endpoint CRUD dengan otorisasi pustakawan via JWT.
-- [ ] Verifikasi bahwa student user hanya bisa membaca katalog.
+- [ ] Add `POST /books` for librarians to add books.
+- [ ] Add `GET /books/{book_id}` to return full metadata.
+- [ ] Add `PUT /books/{book_id}` to update book fields.
+- [ ] Add `DELETE /books/{book_id}` to delete a book.
+- [ ] Protect write endpoints with `require_librarian` JWT role guard.
+- [ ] Ensure students can only use `GET /books` and `GET /books/{book_id}`.
 
-### 4. Frontend — Catalog and search UI
-- [ ] Buat halaman katalog dengan search bar dan filter.
-- [ ] Tampilkan daftar buku dengan `title`, `author`, `ISBN`, dan label ketersediaan.
-- [ ] Tampilkan status `Tersedia` / `Tidak tersedia` secara jelas.
-- [ ] Tautkan tiap entri buku ke halaman detail.
+### 4. Frontend — Catalog list and search
+- [ ] Build a catalog page with:
+  - search input
+  - filters for `author`, `ISBN`, and availability
+  - paginated results
+- [ ] Display each book’s `title`, `author`, `ISBN`, and availability label.
+- [ ] Unavailable books should present a visible `Tidak tersedia` badge.
+- [ ] Book cards or list items link to a detail page.
 
-### 5. Frontend — Book detail and librarian management
-- [ ] Buat halaman detail buku yang menampilkan semua metadata.
-- [ ] Tampilkan tombol `Delete` hanya untuk pustakawan.
-- [ ] Tambahkan halaman atau route terpisah untuk `Add Book` dan `Edit Book`.
-- [ ] Gunakan form terstruktur untuk mengumpulkan metadata buku lengkap.
-- [ ] Sembunyikan atau nonaktifkan kontrol manajemen untuk pengguna non-pustakawan.
+### 5. Frontend — Book detail and librarian actions
+- [ ] Build a detail page showing complete book metadata.
+- [ ] Show `Edit` and `Delete` buttons only to librarians.
+- [ ] Add a confirmation dialog before delete.
+- [ ] Create `Add Book` and `Edit Book` pages/forms including all metadata fields.
+- [ ] Validate required fields and `stock_count` on the frontend.
 
-### 6. Integration & auth alignment
-- [ ] Pastikan UI mengambil peran pengguna dari token JWT.
-- [ ] Pastikan pustakawan melihat kontrol CRUD di antarmuka, siswa tidak.
-- [ ] Pastikan API menolak akses CRUD tanpa peran pustakawan.
+### 6. Integration and auth alignment
+- [ ] Ensure the frontend reads the current user role from JWT and syncs UI controls.
+- [ ] Use `frontend/src/api.js` to attach bearer tokens to backend requests.
+- [ ] Verify the frontend hides librarian controls for student users.
+- [ ] Confirm backend rejects unauthorized CRUD attempts regardless of UI state.
 
-### 7. Verification & testing
-- [ ] Buat backend tests untuk search/filter, availability, dan CRUD.
-- [ ] Buat frontend tests untuk katalog, pencarian, filter, dan form tambah/edit buku.
-- [ ] Jalankan manual checklist verifikasi (lihat bagian "Verification").
+### 7. Testing and verification
+- [ ] Add backend tests for search, filter, and CRUD authorization.
+- [ ] Add frontend tests for catalog search, availability filter, and book form workflows.
+- [ ] Validate end-to-end behavior with a manual verification checklist.
 
 ## Verification
 
 ### Backend verification
-- [ ] `GET /books?q=...` mengembalikan hasil relevan untuk judul/pengarang/ISBN.
-- [ ] `available=true` hanya menampilkan buku dengan `stock_count > 0`.
-- [ ] `POST/PUT/DELETE /books` hanya berhasil dengan JWT pustakawan.
-- [ ] Buku yang tidak tersedia tetap muncul dalam hasil dan ditandai dengan benar.
+- [ ] `GET /books?q=...` returns relevant books for title/author/ISBN queries.
+- [ ] `available=true` returns only books with `stock_count > 0`.
+- [ ] `POST/PUT/DELETE /books` require a librarian JWT.
+- [ ] `GET /books` still returns unavailable books clearly labeled.
 
 ### Frontend verification
-- [ ] Katalog menampilkan buku dan status ketersediaan dengan jelas.
-- [ ] Filter availability dapat mempersempit hasil sesuai pilihan.
-- [ ] Halaman detail buku tersedia untuk semua pengguna.
-- [ ] Tombol delete tampil hanya untuk pustakawan dan meminta konfirmasi.
-- [ ] Form tambah/edit menangani semua metadata yang ditentukan.
+- [ ] Catalog page shows searchable book list with availability badges.
+- [ ] Availability filter narrows results correctly.
+- [ ] Book detail pages are accessible to all users.
+- [ ] Librarian-only controls appear only for librarians.
+- [ ] Add/Edit book flows preserve the full metadata schema.
 
 ## Notes
-- Phase 1 harus menyelesaikan kerangka kerja dasar aplikasi, otentikasi JWT, dan koneksi PostgreSQL.
-- Jika Phase 1 implementasinya belum tersedia, Phase 2 akan mencakup penempatan fitur katalog di dalam struktur aplikasi yang sama.
-- Ide foto buku dicatat sebagai deferred idea dan tidak termasuk dalam Phase 2.
+- Build Phase 2 on the Phase 1 auth foundation; do not introduce new auth or database stacks.
+- Keep advanced search enhancements (e.g. `pg_trgm`) as a follow-on improvement if initial `ILIKE` search is sufficient.
+- This plan is executable with the existing FastAPI + React + PostgreSQL architecture.

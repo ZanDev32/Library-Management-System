@@ -1,7 +1,7 @@
 # Phase 2 Research — Book Catalog
 
 ## Purpose
-Memvalidasi pendekatan teknis untuk fitur katalog buku dan CRUD pustakawan pada Phase 2.
+Validasi pendekatan teknis untuk fitur katalog buku dan CRUD pustakawan yang akan dieksekusi di Phase 2.
 
 ## Inputs
 - `.planning/2-CONTEXT.md`
@@ -10,55 +10,73 @@ Memvalidasi pendekatan teknis untuk fitur katalog buku dan CRUD pustakawan pada 
 - `.planning/ROADMAP.md`
 
 ## Current state
-- Repo saat ini hanya berisi dokumen perencanaan, tidak ada kode backend atau frontend terpasang.
-- Phase 2 akan dibangun di atas stack yang diusulkan: FastAPI, React, PostgreSQL.
-- Prioritas adalah memenuhi scope: pencarian katalog, filter, label ketersediaan, dan CRUD buku oleh pustakawan.
+- Backend auth foundation dan database setup Phase 1 sudah terdefinisi.
+- Phase 2 fokus pada katalog buku: pencarian, filter, tampilan, dan CRUD pustakawan.
+- Tidak ada kode spesifik katalog buku saat ini di backend atau frontend.
 
-## Research findings
+## Key findings
 
-### Search dan relevansi
-- `title`, `author`, dan `ISBN` adalah bidang pencarian utama.
-- Relevansi cerdas dapat dicapai dengan beberapa pendekatan PostgreSQL:
-  - `ILIKE` / `UNACCENT` token matching untuk implementasi sederhana.
-  - `pg_trgm` atau full-text search untuk fuzzy matching dan peringkat relevansi yang lebih baik.
-- Karena repo belum memiliki kode, pendekatan awal yang wajar adalah membangun abstraksi query yang mendukung:
-  - `q` sebagai kata kunci pencarian umum
-  - filter spesifik untuk `author`, `isbn`, dan `availability`
-  - ordering berdasarkan kecocokan query sebelum `title` alfabetis sebagai fallback.
+### Search and filter strategy
+- Search harus mendukung `title`, `author`, dan `ISBN`.
+- Early implementation should use PostgreSQL-friendly search with SQLAlchemy query composition:
+  - `q` performs a broad case-insensitive token search across `title`, `author`, and `isbn`.
+  - `author` and `isbn` support dedicated exact or partial matching.
+  - `available` filters by `stock_count > 0`.
+- For relevance, prefer:
+  - simple `ILIKE`/`lower()` matching first, with `title`/`author` boosts on query term hits.
+  - optional later upgrade to `pg_trgm`/full-text if accuracy becomes a problem.
+- Default result set should include unavailable books, but unavailable items must be clearly labeled.
 
-### Book metadata dan ketersediaan
-- Metadata buku yang diperlukan:
+### Book model and availability
+- Required metadata:
+  - `id`
   - `title`
   - `author`
-  - `ISBN`
+  - `isbn`
   - `genre`
   - `publisher`
   - `publication_year`
   - `stock_count`
-- Ketersediaan harus ditentukan oleh `stock_count` dan juga tampilkan status eksplisit (`Tersedia` / `Tidak tersedia`).
+  - `created_at`
+  - `updated_at`
+- Availability should be derived from `stock_count > 0` and surfaced as a status label.
+- The model should enforce unique `isbn` if possible, but keep data validation flexible enough for legacy records.
 
-### CRUD pustakawan
-- Pustakawan harus memiliki akses API untuk `create`, `read`, `update`, dan `delete` entri buku.
-- Penghapusan sebaiknya diaktifkan dari tampilan detail buku, dengan konfirmasi eksplisit.
-- UI CRUD harus disembunyikan bagi pengguna mahasiswa.
+### Librarian CRUD and role enforcement
+- CRUD endpoints need JWT auth and a `librarian` role guard.
+- Student users should only access read routes: catalog list and book detail.
+- Delete should be available only from detail view and require explicit confirmation in UI.
 
-## Recommended approach
+### Frontend UX implications
+- Catalog page should combine search and filter controls in a single view.
+- Book list should show `title`, `author`, `ISBN`, and availability badge.
+- Detail page should display all metadata and render management controls only for librarians.
+- Add/Edit book forms should capture the full metadata set and preserve `stock_count` semantics.
 
-1. Buat model `Book` dan tabel PostgreSQL dengan semua metadata buku di atas.
-2. Implementasikan endpoint API `/books` untuk pencarian dan filter dengan parameter:
+## Recommendation
+1. Define a `Book` SQLAlchemy model and create/update the PostgreSQL schema.
+2. Implement a backend `GET /books` endpoint with query parameters:
    - `q`
    - `author`
    - `isbn`
    - `available`
-   - `page`, `page_size`
-3. Pastikan API search mengembalikan semua buku secara default, termasuk yang tidak tersedia, dan menandainya dengan label ketersediaan.
-4. Implementasikan endpoint CRUD berikut untuk pustakawan:
+   - `page`
+   - `page_size`
+3. Implement book CRUD endpoints with librarian-only write access:
    - `POST /books`
-   - `GET /books/{id}`
-   - `PUT /books/{id}`
-   - `DELETE /books/{id}`
-5. Terapkan kontrol peran JWT sehingga hanya pustakawan yang dapat membuat, mengubah, dan menghapus buku.
-6. Di frontend, bangun halaman katalog buku, halaman detail, dan form tambah/edit yang terstruktur.
+   - `GET /books/{book_id}`
+   - `PUT /books/{book_id}`
+   - `DELETE /books/{book_id}`
+4. Add frontend pages: catalog list, book detail, add book, edit book.
+5. Ensure UI reflects the current user role from JWT and hides management controls for students.
+6. Add backend and frontend verification tests around search, filter, availability, and role-based authorization.
 
-## Open questions
-- Jika implementasi awal menggunakan `ILIKE`, apakah kita akan menambahkan `pg_trgm` di fase berikutnya untuk meningkatkan fuzzy search? (Ini dapat ditangani oleh planner sebagai risiko / iterasi berikutnya.)
+## Risks and mitigation
+- `pg_trgm` may not be available in all PostgreSQL environments; implement a working `ILIKE` fallback first.
+- Search relevance can be fragile; define explicit ordering rules and keep the first iteration simple.
+- Book deletion must be guarded both in UI and backend to avoid accidental catalog loss.
+
+## Decision
+Use a staged implementation:
+- Phase 2 delivers a reliable search/filter/catalog feature set with explicit availability labels and librarian CRUD.
+- Defer advanced ranking and full-text search enhancements to a later phase if needed.
