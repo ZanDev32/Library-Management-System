@@ -1,3 +1,19 @@
+# Library Management System
+
+Created: 2026-06-08
+
+Overview
+--------
+This project implements a Library Management System to manage books, members, loans, returns, search, and reporting. The repository root contains `PROJECT_SPEC.md` with initial requirements.
+
+Goals
+-----
+- Provide a simple, secure web application for library staff to manage catalog and circulation.
+- Support integrations for notifications and reporting.
+
+Next steps
+----------
+Run `/gsd-plan-phase 1` to begin phase planning and execution.
 # Project Specification
 
 ## Project Name
@@ -46,6 +62,14 @@ The library at Universitas XYZ still manages book lending with paper logs and sp
 - **Frontend:** React
 - **Database:** PostgreSQL
 - **Infra:** Docker (containerized services)
+
+## Project Configuration
+
+- **Frontend:** React + TypeScript + Vite
+- **Backend:** FastAPI (Python)
+- **Database:** PostgreSQL (Production), SQLite (Development)
+- **ORM:** SQLAlchemy / SQLModel
+- **Deployment:** Render.com (free tier) + Cloudflare R2
 
 ## Constraints
 

@@ -1,0 +1,17 @@
+{
+  "workflow": "gsd-new-project",
+  "auto": false,
+  "allowResearch": true,
+  "owner": "",
+  "created": "2026-06-08",
+  "techStack": {
+    "frontend": "React + TypeScript + Vite",
+    "backend": "FastAPI (Python)",
+    "database": {
+      "production": "PostgreSQL",
+      "development": "SQLite"
+    },
+    "orm": "SQLAlchemy / SQLModel",
+    "deployment": "Render.com (free tier) + Cloudflare R2"
+  }
+}

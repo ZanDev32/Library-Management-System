@@ -1,3 +1,19 @@
+# Roadmap — Phase Plan
+
+Phase 1 — MVP (2–4 weeks)
+- Implement book catalog CRUD, member CRUD, basic borrowing/return flows, and simple UI.
+
+Phase 2 — Search & UX (1–2 weeks)
+- Add advanced search, pagination, and improve UI/UX.
+
+Phase 3 — Notifications & Reports (1–2 weeks)
+- Integrate email/SMS reminders and generate standard reports.
+
+Phase 4 — Admin & Security (1 week)
+- Role-based access, audit logs, backups.
+
+Phase 5 — Deployment & Monitoring (1 week)
+- Containerization, CI/CD, monitoring, and production readiness.
 # Roadmap — Library Management System (LMS)
 
 ## Milestone Overview
