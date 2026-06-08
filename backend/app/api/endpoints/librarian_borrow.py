@@ -55,3 +55,49 @@ def process_requests(
             
     db.commit()
     return {"results": results}
+
+class ReturnScanIn(BaseModel):
+    loan_id: int
+
+@router.post("/returns/scan")
+def process_return_scan(
+    payload: ReturnScanIn,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_librarian)
+):
+    req = db.query(BorrowRequest).filter(BorrowRequest.id == payload.loan_id).first()
+    if not req:
+        raise HTTPException(status_code=404, detail="Loan not found")
+        
+    if req.status not in (BorrowStatus.APPROVED, BorrowStatus.PICKED_UP):
+        raise HTTPException(status_code=400, detail="Book is not currently borrowed")
+        
+    req.status = BorrowStatus.RETURNED
+    req.return_date = datetime.utcnow()
+    
+    # Calculate overdue days if returned after due_date
+    days_late = 0
+    if req.due_date and req.return_date > req.due_date:
+        delta = req.return_date - req.due_date
+        days_late = delta.days if delta.days > 0 else 1 # at least 1 day late if it crossed the timestamp
+        
+    db.commit()
+    return {"message": "Book returned successfully", "days_late": days_late}
+
+@router.post("/{loan_id}/pickup")
+def mark_picked_up(
+    loan_id: int,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_librarian)
+):
+    req = db.query(BorrowRequest).filter(BorrowRequest.id == loan_id).first()
+    if not req:
+        raise HTTPException(status_code=404, detail="Loan not found")
+        
+    if req.status != BorrowStatus.APPROVED:
+        raise HTTPException(status_code=400, detail="Book is not in APPROVED state")
+        
+    req.status = BorrowStatus.PICKED_UP
+    db.commit()
+    return {"message": "Book marked as picked up"}
+

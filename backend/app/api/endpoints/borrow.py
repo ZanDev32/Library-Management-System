@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Any
 
 from backend.app.api.deps import get_db, get_current_student
-from backend.app.models.borrow import BorrowRequest, BorrowStatus, Waitlist, WaitlistStatus
+from backend.app.models.borrow import BorrowRequest, BorrowStatus, Waitlist, WaitlistStatus, ExtensionRequest, ExtensionStatus
 
 router = APIRouter()
 
@@ -48,3 +48,33 @@ def join_waitlist(
     db.commit()
     db.refresh(waitlist_req)
     return {"message": "Added to waitlist", "waitlist_id": waitlist_req.id}
+
+class ExtensionRequestIn(BaseModel):
+    loan_id: int
+
+@router.post("/extend", response_model=Any)
+def request_extension(
+    req: ExtensionRequestIn,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_student)
+):
+    borrow_req = db.query(BorrowRequest).filter(
+        BorrowRequest.id == req.loan_id, 
+        BorrowRequest.user_id == current_user["id"]
+    ).first()
+    
+    if not borrow_req:
+        raise HTTPException(status_code=404, detail="Loan not found")
+        
+    if borrow_req.status not in (BorrowStatus.APPROVED, BorrowStatus.PICKED_UP):
+        raise HTTPException(status_code=400, detail="Can only extend active loans")
+        
+    ext_req = ExtensionRequest(
+        borrow_request_id=req.loan_id,
+        status=ExtensionStatus.PENDING
+    )
+    db.add(ext_req)
+    db.commit()
+    db.refresh(ext_req)
+    return {"message": "Extension request submitted", "extension_id": ext_req.id}
+
