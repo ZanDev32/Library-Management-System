@@ -1,0 +1,41 @@
+# Python / FastAPI
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / React
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Database
+*.sqlite3
+postgres_data/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.log
+
+# Build artifacts
+build/
+coverage/
