@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: lms_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-lms_db}
+      POSTGRES_USER: ${POSTGRES_USER:-lms_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lms_user} -d ${POSTGRES_DB:-lms_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: lms_backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-lms_user}:${DB_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-lms_db}
+      SECRET_KEY: ${SECRET_KEY:-changeme_secret}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@university.ac.id}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme_admin}
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: lms_frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-/api}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "60:5173"
+
+volumes:
+  postgres_data:
