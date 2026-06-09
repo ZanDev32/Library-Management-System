@@ -3,6 +3,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import { ProtectedRoute, RoleGuard } from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Landing from './pages/Landing'
 import Home from './pages/Home'
 import BookCatalog from './pages/BookCatalog'
 import BookDetail from './pages/BookDetail'
@@ -17,8 +18,9 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Landing />} />
           <Route
-            path="/"
+            path="/home"
             element={
               <ProtectedRoute>
                 <Home />

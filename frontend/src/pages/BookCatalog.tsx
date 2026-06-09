@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { fetchBooks, type BookFilters } from '../api/books'
+import { requestBorrow } from '../api/borrows'
 import type { Book } from '../types/book'
+import Layout from '../components/Layout'
+
+const CARD_COLORS = ['#d5e8d4', '#dae8fc', '#fff2cc', '#f8cecc', '#e1d5e7', '#d5e8d4']
+const CARD_ICONS = ['📊', '💻', '🌐', '⚙️', '🤖', '📱', '🧮', '📈', '🔬', '🎓']
 
 export default function BookCatalog() {
   const { user } = useAuth()
@@ -15,6 +20,7 @@ export default function BookCatalog() {
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [borrowMsg, setBorrowMsg] = useState<string | null>(null)
   const pageSize = 12
 
   useEffect(() => {
@@ -47,14 +53,25 @@ export default function BookCatalog() {
     setPage(1)
   }
 
+  const handleBorrow = async (bookId: string) => {
+    setBorrowMsg(null)
+    setError(null)
+    try {
+      await requestBorrow({ book_id: bookId })
+      setBorrowMsg('Permintaan peminjaman berhasil dikirim. Menunggu persetujuan pustakawan.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Gagal mengirim permintaan')
+    }
+  }
+
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
 
   return (
-    <div style={styles.container}>
+    <Layout>
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>Daftar Buku</h1>
-          <p style={styles.subtitle}>Telusuri koleksi buku berdasarkan judul, penulis, atau ISBN.</p>
+          <h1 className="page-title">📖 Katalog Buku</h1>
+          <p className="page-subtitle">Temukan dan pinjam buku dari koleksi perpustakaan</p>
         </div>
         {user?.role === 'librarian' && (
           <Link to="/books/new" style={styles.addBtn}>
@@ -92,26 +109,48 @@ export default function BookCatalog() {
         <button type="submit" style={styles.searchBtn}>Terapkan</button>
       </form>
 
+      {borrowMsg && <p style={styles.success}>{borrowMsg}</p>}
       {loading && <p>Memuat daftar buku...</p>}
       {error && <p style={styles.error}>{error}</p>}
       {!loading && books.length === 0 && <p>Tidak ada buku yang ditemukan.</p>}
 
-      <div style={styles.grid}>
-        {books.map((book) => (
-          <article key={book.id} style={styles.card}>
-            <div style={styles.cardHeader}>
-              <h2 style={styles.bookTitle}>{book.title}</h2>
-              <span style={{ ...styles.badge, ...(book.available ? styles.badgeAvailable : styles.badgeUnavailable) }}>
-                {book.available ? 'Tersedia' : 'Tidak tersedia'}
-              </span>
-            </div>
-            <p style={styles.bookAuthor}>{book.author}</p>
-            <p style={styles.bookIsbn}>ISBN: {book.isbn}</p>
-            <Link to={`/books/${book.id}`} style={styles.detailLink}>
-              Lihat detail →
-            </Link>
-          </article>
-        ))}
+      <div className="book-grid">
+        {books.map((book, idx) => {
+          const color = CARD_COLORS[idx % CARD_COLORS.length]
+          const icon = CARD_ICONS[idx % CARD_ICONS.length]
+          return (
+            <article key={book.id} className="book-card">
+              <Link to={`/books/${book.id}`} className="cover" style={{ background: color, textDecoration: 'none' }}>
+                {icon}
+              </Link>
+              <div className="body">
+                <h3>{book.title}</h3>
+                <p className="author">{book.author}</p>
+                <p className="isbn">ISBN: {book.isbn}</p>
+                <p className={`stock ${book.available ? 'available' : 'unavailable'}`}>
+                  {book.available ? `${book.available_quantity} copy tersedia` : 'Semua copy dipinjam'}
+                </p>
+                <div className="card-action">
+                  {user?.role === 'student' ? (
+                    book.available ? (
+                      <button className="btn-borrow" onClick={() => handleBorrow(book.id)}>
+                        📖 Pinjam
+                      </button>
+                    ) : (
+                      <button className="btn-waitlist" onClick={() => handleBorrow(book.id)}>
+                        📋 Masuk Antrian
+                      </button>
+                    )
+                  ) : (
+                    <Link to={`/books/${book.id}`} className="btn-borrow" style={{ textDecoration: 'none' }}>
+                      Lihat Detail
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </article>
+          )
+        })}
       </div>
 
       <div style={styles.pagination}>
@@ -131,31 +170,19 @@ export default function BookCatalog() {
           Selanjutnya →
         </button>
       </div>
-    </div>
+    </Layout>
   )
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { fontFamily: 'system-ui, sans-serif', padding: '1rem', maxWidth: '1000px', margin: '0 auto' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' },
-  title: { fontSize: '1.5rem', margin: 0 },
-  subtitle: { color: '#666', margin: '0.25rem 0 0' },
-  addBtn: { padding: '0.5rem 1rem', background: '#2563eb', color: '#fff', borderRadius: '6px', textDecoration: 'none', fontSize: '0.9rem' },
+  addBtn: { padding: '0.5rem 1rem', background: 'var(--success-color)', color: '#fff', borderRadius: 'var(--radius)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 },
   searchForm: { display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.5rem' },
-  input: { padding: '0.4rem 0.6rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' },
-  select: { padding: '0.4rem 0.6rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' },
-  searchBtn: { padding: '0.4rem 0.8rem', background: '#f3f4f6', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' },
-  error: { color: '#dc2626' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' },
-  card: { border: '1px solid #e5e7eb', borderRadius: '8px', padding: '1rem' },
-  cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' },
-  bookTitle: { fontSize: '1rem', margin: 0 },
-  badge: { fontSize: '0.75rem', padding: '0.15rem 0.5rem', borderRadius: '12px', whiteSpace: 'nowrap' },
-  badgeAvailable: { background: '#dcfce7', color: '#166534' },
-  badgeUnavailable: { background: '#fee2e2', color: '#991b1b' },
-  bookAuthor: { color: '#4b5563', margin: '0.5rem 0 0.25rem' },
-  bookIsbn: { color: '#6b7280', fontSize: '0.85rem', margin: 0 },
-  detailLink: { display: 'inline-block', marginTop: '0.75rem', color: '#2563eb', textDecoration: 'none', fontSize: '0.9rem' },
+  input: { padding: '0.4rem 0.6rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius)', fontSize: '0.9rem' },
+  select: { padding: '0.4rem 0.6rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius)', fontSize: '0.9rem' },
+  searchBtn: { padding: '0.4rem 0.8rem', background: 'var(--primary-color)', border: 'none', borderRadius: 'var(--radius)', color: '#fff', cursor: 'pointer', fontWeight: 600 },
+  error: { color: 'var(--danger-color)' },
+  success: { color: '#166534', background: '#dcfce7', padding: '0.6rem 1rem', borderRadius: 'var(--radius)', marginBottom: '1rem' },
   pagination: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '2rem' },
-  pageBtn: { padding: '0.4rem 0.8rem', border: '1px solid #ccc', borderRadius: '4px', background: '#fff', cursor: 'pointer' },
+  pageBtn: { padding: '0.4rem 0.8rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius)', background: 'var(--surface-color)', cursor: 'pointer', color: 'var(--text-color)' },
 }

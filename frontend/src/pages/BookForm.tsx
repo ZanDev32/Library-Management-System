@@ -163,14 +163,14 @@ export default function BookForm() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { fontFamily: 'system-ui, sans-serif', padding: '1rem', maxWidth: '600px', margin: '0 auto' },
+  container: { padding: '1.5rem', maxWidth: '600px', margin: '0 auto' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' },
-  title: { fontSize: '1.5rem', margin: 0 },
-  subtitle: { color: '#666', margin: '0.25rem 0 0' },
-  backBtn: { padding: '0.4rem 0.8rem', border: '1px solid #ccc', borderRadius: '4px', textDecoration: 'none', color: '#333', background: '#fff' },
+  title: { fontSize: '1.5rem', margin: 0, color: 'var(--primary-color)' },
+  subtitle: { color: 'var(--text-muted)', margin: '0.25rem 0 0' },
+  backBtn: { padding: '0.4rem 0.8rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius)', textDecoration: 'none', color: 'var(--text-color)', background: 'var(--surface-color)' },
   form: { display: 'flex', flexDirection: 'column', gap: '1rem' },
-  label: { display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.9rem', fontWeight: 500 },
-  input: { padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' },
-  submitBtn: { marginTop: '0.5rem', padding: '0.6rem 1rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '1rem' },
-  error: { color: '#dc2626', marginTop: '1rem' },
+  label: { display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.9rem', fontWeight: 500, color: 'var(--text-color)' },
+  input: { padding: '0.5rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius)', fontSize: '0.9rem' },
+  submitBtn: { marginTop: '0.5rem', padding: '0.6rem 1rem', background: 'var(--primary-color)', color: '#fff', border: 'none', borderRadius: 'var(--radius)', cursor: 'pointer', fontSize: '1rem', fontWeight: 600 },
+  error: { color: 'var(--danger-color)', marginTop: '1rem' },
 }

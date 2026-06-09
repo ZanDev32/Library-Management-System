@@ -19,6 +19,8 @@ async def lifespan(_app: FastAPI):
     # Seed default librarian
     async with AsyncSessionLocal() as session:
         await seed_librarian(session)
+        from app.core.seed_books import seed_books
+        await seed_books(session, target=1000)
 
     yield
     # On shutdown

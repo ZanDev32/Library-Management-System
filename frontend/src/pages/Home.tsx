@@ -1,41 +1,53 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import Layout from '../components/Layout'
 
 export default function Home() {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
 
   return (
-    <div style={styles.container}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>Library Management System</h1>
-        <button onClick={logout} style={styles.logoutBtn}>
-          Logout
-        </button>
-      </header>
+    <Layout>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <h1 className="page-title">🏠 Selamat Datang, {user?.full_name}</h1>
+        <p className="page-subtitle">Pilih menu untuk mulai menggunakan sistem perpustakaan.</p>
 
-      <main style={styles.main}>
-        <h2>Welcome, {user?.full_name}</h2>
-        <span style={styles.badge}>{user?.role}</span>
-
-        <nav style={styles.nav}>
-          <Link to="/books" style={styles.navLink}>📚 Katalog Buku</Link>
-          <Link to="/my-loans" style={styles.navLink}>📋 Peminjaman Saya</Link>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginTop: '24px' }}>
+          <Link to="/books" style={styles.card}>
+            <span style={{ fontSize: '2rem' }}>📚</span>
+            <strong>Katalog Buku</strong>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Telusuri &amp; pinjam buku</span>
+          </Link>
+          <Link to="/my-loans" style={styles.card}>
+            <span style={{ fontSize: '2rem' }}>📋</span>
+            <strong>Peminjaman Saya</strong>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Lihat status peminjaman</span>
+          </Link>
           {user?.role === 'librarian' && (
-            <Link to="/dashboard" style={styles.navLink}>🏛️ Dashboard Pustakawan</Link>
+            <Link to="/dashboard" style={styles.card}>
+              <span style={{ fontSize: '2rem' }}>🏛️</span>
+              <strong>Dashboard Pustakawan</strong>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Kelola peminjaman</span>
+            </Link>
           )}
-        </nav>
-      </main>
-    </div>
+        </div>
+      </div>
+    </Layout>
   )
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { fontFamily: 'system-ui, sans-serif', padding: '1rem', maxWidth: '800px', margin: '0 auto' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '0.5rem' },
-  title: { fontSize: '1.25rem', margin: 0 },
-  logoutBtn: { padding: '0.4rem 0.8rem', border: '1px solid #ccc', borderRadius: '4px', background: '#fff', cursor: 'pointer' },
-  main: { marginTop: '2rem' },
-  badge: { display: 'inline-block', padding: '0.2rem 0.6rem', borderRadius: '12px', background: '#e0f2fe', color: '#0369a1', fontSize: '0.8rem', textTransform: 'capitalize' },
-  nav: { marginTop: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' },
-  navLink: { padding: '0.6rem 1.2rem', background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: '8px', textDecoration: 'none', color: '#1f2937', fontSize: '1rem' },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '24px',
+    borderRadius: 'var(--radius)',
+    border: '1px solid var(--border-color)',
+    background: 'var(--surface-color)',
+    textDecoration: 'none',
+    color: 'var(--text-color)',
+    boxShadow: 'var(--shadow-sm)',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+  },
 }
