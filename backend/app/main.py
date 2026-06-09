@@ -9,11 +9,17 @@ from app.core.config import settings
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # On startup: create tables if they don't exist (dev convenience)
-    from app.core.database import engine, Base
+    from app.core.database import engine, Base, AsyncSessionLocal
     import app.models  # noqa: F401 — ensures models are imported
+    from app.core.seed import seed_librarian
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+    # Seed default librarian
+    async with AsyncSessionLocal() as session:
+        await seed_librarian(session)
+
     yield
     # On shutdown
     await engine.dispose()
@@ -38,6 +44,11 @@ def create_app() -> FastAPI:
     @app.get("/health")
     async def health_check():
         return {"status": "ok"}
+
+    # Routers
+    from app.routers import auth
+
+    app.include_router(auth.router, prefix="/auth", tags=["auth"])
 
     return app
 
