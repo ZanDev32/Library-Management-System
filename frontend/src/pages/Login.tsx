@@ -16,7 +16,7 @@ export default function Login() {
     setLoading(true)
     try {
       await login(email, password)
-      navigate('/', { replace: true })
+      navigate('/home', { replace: true })
     } catch {
       setError('Invalid email or password.')
     } finally {
@@ -27,7 +27,11 @@ export default function Login() {
   return (
     <div style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
-        <h1 style={styles.title}>Login</h1>
+        <div style={styles.brand}>
+          <span style={{ fontSize: '2rem' }}>📚</span>
+          <span style={styles.brandText}>Perpustakaan Universitas XYZ</span>
+        </div>
+        <h1 style={styles.title}>Masuk</h1>
         <p style={styles.subtitle}>Library Management System</p>
 
         {error && <div style={styles.error}>{error}</div>}
@@ -55,11 +59,11 @@ export default function Login() {
         </label>
 
         <button type="submit" disabled={loading} style={styles.button}>
-          {loading ? 'Signing in...' : 'Sign In'}
+          {loading ? 'Memproses...' : 'Masuk'}
         </button>
 
         <p style={styles.footer}>
-          Don't have an account? <Link to="/register">Register</Link>
+          Belum punya akun? <Link to="/register">Daftar</Link>
         </p>
       </form>
     </div>
@@ -73,7 +77,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '1rem',
-    fontFamily: 'system-ui, sans-serif',
+    background: 'var(--bg-color)',
   },
   form: {
     width: '100%',
@@ -81,20 +85,34 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     gap: '1rem',
+    background: 'var(--surface-color)',
+    padding: '2.5rem 2rem',
+    borderRadius: 'var(--radius)',
+    border: '1px solid var(--border-color)',
+    boxShadow: 'var(--shadow-md)',
   },
-  title: { margin: 0, fontSize: '1.5rem' },
-  subtitle: { margin: 0, color: '#666' },
-  label: { display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.9rem' },
-  input: { padding: '0.6rem', borderRadius: '4px', border: '1px solid #ccc', fontSize: '1rem' },
+  brand: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '0.5rem',
+    marginBottom: '0.5rem',
+  },
+  brandText: { fontWeight: 700, color: 'var(--primary-color)', fontSize: '1rem' },
+  title: { margin: 0, fontSize: '1.5rem', color: 'var(--primary-color)', textAlign: 'center' },
+  subtitle: { margin: 0, color: 'var(--text-muted)', textAlign: 'center', fontSize: '0.9rem' },
+  label: { display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.9rem', color: 'var(--text-color)', fontWeight: 600 },
+  input: { padding: '0.6rem', borderRadius: 'var(--radius)', border: '1px solid var(--border-color)', fontSize: '1rem' },
   button: {
     padding: '0.75rem',
-    borderRadius: '4px',
+    borderRadius: 'var(--radius)',
     border: 'none',
-    background: '#2563eb',
+    background: 'var(--primary-color)',
     color: '#fff',
     fontSize: '1rem',
+    fontWeight: 600,
     cursor: 'pointer',
   },
-  error: { background: '#fee2e2', color: '#b91c1c', padding: '0.5rem', borderRadius: '4px' },
-  footer: { textAlign: 'center', fontSize: '0.9rem' },
+  error: { background: '#fee2e2', color: 'var(--danger-color)', padding: '0.5rem', borderRadius: 'var(--radius)', fontSize: '0.9rem' },
+  footer: { textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' },
 }
