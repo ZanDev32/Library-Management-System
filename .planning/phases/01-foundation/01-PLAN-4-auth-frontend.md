@@ -26,19 +26,23 @@ From `01-RESEARCH.md` §4:
 - `frontend/src/api/client.ts`:
   - Create Axios instance with `baseURL = import.meta.env.VITE_API_URL || '/api'`
   - `withCredentials = true` (needed for httpOnly cookie)
-  - Request interceptor: attach `Authorization: Bearer <token>` from auth context
-  - Response interceptor: on 401, call `/auth/refresh` once, retry original request; if refresh fails, clear auth state
+  - Request interceptor: attach `Authorization: Bearer <token>` from a token accessor injected by AuthContext (avoid circular import — use a module-level setter `setTokenGetter(fn)`)
+  - Response interceptor: on 401 (and not already retried), call `POST /auth/refresh` once → on success, update the stored access token and retry the original request with the new token; on refresh failure, clear auth state and reject
+  - **Note:** The refresh call itself relies on the httpOnly refresh cookie (sent automatically because `withCredentials = true`). The refresh endpoint is NOT protected by the Bearer-token guard.
 
 ### Task 4.2: Auth context
 - `frontend/src/contexts/AuthContext.tsx`:
-  - State: `user` (null or UserResponse), `accessToken` (null or string), `loading` (boolean)
-  - On mount: call `/auth/me` (without access token — refresh cookie handles it)
-    - If success: set user and access token from response
-    - If 401: set user=null (not logged in)
-  - `login(email, password)` → POST /auth/login → store access token, fetch /auth/me
-  - `register(email, password, full_name)` → POST /auth/register → redirect to login
-  - `logout()` → POST /auth/logout → clear state
-  - `getToken()` → return current access token (for interceptor)
+  - State: `user` (null or User), `accessToken` (null or string), `loading` (boolean)
+  - **On mount (session restore):**
+    1. Call `POST /auth/refresh` directly (the httpOnly refresh cookie is sent automatically). This does NOT require an access token.
+    2. If refresh succeeds → store the returned `access_token`, then call `GET /auth/me` (now authenticated via Bearer token) → set `user`.
+    3. If refresh fails (no/expired cookie → 401) → set `user = null`, `accessToken = null` (not logged in).
+    4. Set `loading = false` when done.
+  - **`login(email, password)`:** `POST /auth/login` → returns `TokenResponse`. Store `access_token` in state, then call `GET /auth/me` with that token to fetch and set the user profile.
+  - **`register(email, password, full_name)`:** `POST /auth/register` → on success, redirect to login (do not auto-login).
+  - **`logout()`:** `POST /auth/logout` → clear `user` and `accessToken` state.
+  - Register a token getter with the API client (`setTokenGetter(() => accessToken)`) so the request interceptor can read the current token without a circular import.
+  - **Contract note:** `/auth/login` and `/auth/refresh` return `TokenResponse { access_token, token_type }` (no user object). User data always comes from `/auth/me`. This is the agreed contract with Plan 3 (Tasks 3.2, 3.5).
 
 ### Task 4.3: Auth types
 - `frontend/src/types/auth.ts`:
