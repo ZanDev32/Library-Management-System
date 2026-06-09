@@ -1,15 +1,13 @@
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     container_name: lms_db
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-lms_db}
       POSTGRES_USER: ${POSTGRES_USER:-lms_user}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - postgres_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lms_user} -d ${POSTGRES_DB:-lms_db}"]
       interval: 5s
@@ -31,8 +29,6 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme_admin}
     volumes:
       - ./backend:/app
-    ports:
-      - "8000:8000"
 
   frontend:
     build: ./frontend
@@ -40,12 +36,12 @@ services:
     depends_on:
       - backend
     environment:
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+      VITE_API_URL: ${VITE_API_URL:-/api}
     volumes:
       - ./frontend:/app
       - /app/node_modules
     ports:
-      - "5173:5173"
+      - "60:5173"
 
 volumes:
   postgres_data:
