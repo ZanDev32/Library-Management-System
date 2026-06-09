@@ -7,6 +7,8 @@ import Home from './pages/Home'
 import BookCatalog from './pages/BookCatalog'
 import BookDetail from './pages/BookDetail'
 import BookForm from './pages/BookForm'
+import MyLoans from './pages/MyLoans'
+import LibrarianDashboard from './pages/LibrarianDashboard'
 
 function App() {
   return (
@@ -55,6 +57,24 @@ function App() {
               <ProtectedRoute>
                 <RoleGuard allowedRoles={['librarian']}>
                   <BookForm />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-loans"
+            element={
+              <ProtectedRoute>
+                <MyLoans />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={['librarian']}>
+                  <LibrarianDashboard />
                 </RoleGuard>
               </ProtectedRoute>
             }

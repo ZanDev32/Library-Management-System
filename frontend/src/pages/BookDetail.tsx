@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { getBook, deleteBook } from '../api/books'
+import { requestBorrow } from '../api/borrows'
 import type { Book } from '../types/book'
 
 export default function BookDetail() {
@@ -11,6 +12,7 @@ export default function BookDetail() {
   const [book, setBook] = useState<Book | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [borrowMsg, setBorrowMsg] = useState<string | null>(null)
 
   useEffect(() => {
     if (!id) return
@@ -18,7 +20,7 @@ export default function BookDetail() {
       setLoading(true)
       setError(null)
       try {
-        const data = await getBook(id!)
+        const data = await getBook(id)
         setBook(data)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load book')
@@ -30,12 +32,24 @@ export default function BookDetail() {
   }, [id])
 
   const handleDelete = async () => {
-    if (!id || !window.confirm('Apakah Anda yakin ingin menghapus buku ini?')) return
+    if (!id || !globalThis.confirm('Apakah Anda yakin ingin menghapus buku ini?')) return
     try {
       await deleteBook(id)
       navigate('/books')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete book')
+    }
+  }
+
+  const handleBorrow = async () => {
+    if (!id) return
+    setBorrowMsg(null)
+    setError(null)
+    try {
+      await requestBorrow({ book_id: id })
+      setBorrowMsg('Permintaan peminjaman berhasil dikirim. Menunggu persetujuan pustakawan.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Gagal mengirim permintaan')
     }
   }
 
@@ -55,6 +69,9 @@ export default function BookDetail() {
         </div>
         <div style={styles.actions}>
           <Link to="/books" style={styles.backBtn}>← Kembali ke daftar</Link>
+          {user?.role === 'student' && book.available && (
+            <button onClick={handleBorrow} style={styles.borrowBtn}>Pinjam Buku</button>
+          )}
           {user?.role === 'librarian' && (
             <>
               <Link to={`/books/${book.id}/edit`} style={styles.editBtn}>Edit</Link>
@@ -63,6 +80,8 @@ export default function BookDetail() {
           )}
         </div>
       </div>
+
+      {borrowMsg && <p style={styles.success}>{borrowMsg}</p>}
 
       <div style={styles.metadata}>
         <p><strong>ISBN:</strong> {book.isbn}</p>
@@ -87,6 +106,8 @@ const styles: Record<string, React.CSSProperties> = {
   backBtn: { padding: '0.4rem 0.8rem', border: '1px solid #ccc', borderRadius: '4px', textDecoration: 'none', color: '#333', background: '#fff' },
   editBtn: { padding: '0.4rem 0.8rem', background: '#2563eb', color: '#fff', borderRadius: '4px', textDecoration: 'none' },
   deleteBtn: { padding: '0.4rem 0.8rem', background: '#dc2626', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+  borrowBtn: { padding: '0.4rem 0.8rem', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+  success: { color: '#166534', background: '#dcfce7', padding: '0.6rem 1rem', borderRadius: '6px', marginBottom: '1rem' },
   metadata: { background: '#f9fafb', padding: '1.5rem', borderRadius: '8px', lineHeight: 1.8 },
   error: { color: '#dc2626' },
 }
