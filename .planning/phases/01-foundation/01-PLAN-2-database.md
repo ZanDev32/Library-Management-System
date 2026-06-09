@@ -25,6 +25,9 @@ From `01-RESEARCH.md` §2:
 ### Task 2.1: Database connection setup
 - `backend/app/core/database.py`:
   - `create_async_engine(settings.DATABASE_URL)`
+### Task 2.1: Database connection setup
+- `backend/app/core/database.py`:
+  - `create_async_engine(settings.DATABASE_URL)` with connection pooling tuned for performance (NF01): `pool_size=10`, `max_overflow=20`, `pool_pre_ping=True`, `pool_recycle=1800`
   - `AsyncSessionLocal` via `async_sessionmaker`
   - `Base = declarative_base()`
   - `get_db()` async generator dependency
@@ -86,6 +89,7 @@ From `01-RESEARCH.md` §2:
 - [ ] Columns and constraints match the model definitions
 - [ ] Foreign keys exist between borrow_records → users, borrow_records → books
 - [ ] Indexes created on email, isbn, user_id, book_id, status
+- [ ] Connection pool is configured (pool_size/max_overflow set) — supports NF01 under concurrent load
 
 ## Definition of Done
 

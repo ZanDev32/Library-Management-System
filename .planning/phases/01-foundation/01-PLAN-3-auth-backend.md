@@ -88,6 +88,7 @@ From `01-RESEARCH.md` §1:
 - [ ] `GET /auth/me` with valid token returns user profile
 - [ ] `GET /auth/me` without token returns 401
 - [ ] Librarian-only endpoint returns 403 for student role
+- [ ] **NF01:** `/auth/login`, `/auth/me`, and `/auth/refresh` each respond in under 2 seconds (measure with `curl -w "%{time_total}"` against the running stack)
 
 ## Definition of Done
 
