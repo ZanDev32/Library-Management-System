@@ -79,15 +79,33 @@ export default function LibrarianDashboard() {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 style={styles.title}>Dashboard Pustakawan</h1>
-        <Link to="/" style={styles.backBtn}>← Beranda</Link>
-      </div>
+    <div className="librarian-dashboard">
+      {/* Sidebar with metrics widgets — ported from Phase 04 "Sidebar & Widget" layout */}
+      <aside className="dashboard-sidebar">
+        <div className="metrics-widget">
+          <h3>Menunggu</h3>
+          <p>{pending.length}</p>
+        </div>
+        <div className="metrics-widget">
+          <h3>Aktif</h3>
+          <p>{active.length}</p>
+        </div>
+        <div className="metrics-widget">
+          <h3>Total</h3>
+          <p>{pending.length + active.length}</p>
+        </div>
+        <Link to="/" className="btn-secondary" style={{ textDecoration: 'none', textAlign: 'center' }}>
+          ← Beranda
+        </Link>
+      </aside>
 
-      {message && <p style={styles.success}>{message}</p>}
-      {error && <p style={styles.error}>{error}</p>}
-      {loading && <p>Memuat...</p>}
+      {/* Main content area */}
+      <main className="dashboard-main">
+        <h1 style={styles.title}>Dashboard Pustakawan</h1>
+
+        {message && <p style={styles.success}>{message}</p>}
+        {error && <p style={styles.error}>{error}</p>}
+        {loading && <p>Memuat...</p>}
 
       <section style={styles.section}>
         <h2 style={styles.sectionTitle}>Permintaan Menunggu ({pending.length})</h2>
@@ -98,11 +116,11 @@ export default function LibrarianDashboard() {
               <strong>Buku:</strong> {req.book_id.slice(0, 8)}...{' '}
               <span style={styles.muted}>oleh {req.user_id.slice(0, 8)}...</span>
             </div>
-            <div style={styles.actions}>
-              <button style={styles.approveBtn} onClick={() => handleAction(req.id, 'approve')}>
+            <div className="actions-bar">
+              <button className="btn-success" onClick={() => handleAction(req.id, 'approve')}>
                 Setujui
               </button>
-              <button style={styles.rejectBtn} onClick={() => handleAction(req.id, 'reject')}>
+              <button className="btn-danger" onClick={() => handleAction(req.id, 'reject')}>
                 Tolak
               </button>
             </div>
@@ -120,22 +138,30 @@ export default function LibrarianDashboard() {
             value={returnId}
             onChange={(e) => setReturnId(e.target.value)}
           />
-          <button type="submit" style={styles.returnBtn}>Proses Pengembalian</button>
+          <button type="submit" className="btn-primary">Proses Pengembalian</button>
         </form>
       </section>
 
       <section style={styles.section}>
         <h2 style={styles.sectionTitle}>Peminjaman Aktif ({active.length})</h2>
         {active.length === 0 && <p style={styles.empty}>Tidak ada peminjaman aktif.</p>}
-        <table style={styles.table}>
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>ID Peminjaman</th>
+              <th>Buku</th>
+              <th className="hide-on-mobile">Jatuh Tempo</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
           <tbody>
             {active.map((loan) => (
               <tr key={loan.id}>
-                <td style={styles.td}><code style={styles.code}>{loan.id.slice(0, 8)}...</code></td>
-                <td style={styles.td}>Buku {loan.book_id.slice(0, 8)}...</td>
-                <td style={styles.td}>Jatuh tempo: {loan.due_date ? new Date(loan.due_date).toLocaleDateString('id-ID') : '-'}</td>
-                <td style={styles.td}>
-                  <button style={styles.smallBtn} onClick={() => setReturnId(loan.id)}>
+                <td><code style={styles.code}>{loan.id.slice(0, 8)}...</code></td>
+                <td>Buku {loan.book_id.slice(0, 8)}...</td>
+                <td className="hide-on-mobile">{loan.due_date ? new Date(loan.due_date).toLocaleDateString('id-ID') : '-'}</td>
+                <td>
+                  <button className="btn-secondary" onClick={() => setReturnId(loan.id)}>
                     Pilih untuk kembali
                   </button>
                 </td>
@@ -144,30 +170,21 @@ export default function LibrarianDashboard() {
           </tbody>
         </table>
       </section>
+      </main>
     </div>
   )
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { fontFamily: 'system-ui, sans-serif', padding: '1rem', maxWidth: '900px', margin: '0 auto' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' },
-  title: { fontSize: '1.5rem', margin: 0 },
-  backBtn: { padding: '0.4rem 0.8rem', border: '1px solid #ccc', borderRadius: '4px', textDecoration: 'none', color: '#333', background: '#fff' },
+  title: { fontSize: '1.5rem', margin: '0 0 1rem 0' },
   success: { color: '#166534', background: '#dcfce7', padding: '0.6rem 1rem', borderRadius: '6px' },
   error: { color: '#991b1b', background: '#fee2e2', padding: '0.6rem 1rem', borderRadius: '6px' },
   section: { marginTop: '2rem' },
-  sectionTitle: { fontSize: '1.1rem', borderBottom: '2px solid #e5e7eb', paddingBottom: '0.5rem' },
-  empty: { color: '#9ca3af' },
-  row: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '6px', marginBottom: '0.5rem' },
-  muted: { color: '#9ca3af', fontSize: '0.85rem' },
-  actions: { display: 'flex', gap: '0.5rem' },
-  approveBtn: { padding: '0.4rem 0.8rem', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' },
-  rejectBtn: { padding: '0.4rem 0.8rem', background: '#dc2626', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+  sectionTitle: { fontSize: '1.1rem', borderBottom: '2px solid var(--border-color)', paddingBottom: '0.5rem', color: 'var(--primary-color)' },
+  empty: { color: 'var(--text-muted)' },
+  row: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius)', marginBottom: '0.5rem', backgroundColor: 'var(--surface-color)' },
+  muted: { color: 'var(--text-muted)', fontSize: '0.85rem' },
   returnForm: { display: 'flex', gap: '0.5rem', marginTop: '0.5rem' },
-  input: { flex: 1, padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' },
-  returnBtn: { padding: '0.5rem 1rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' },
-  table: { width: '100%', borderCollapse: 'collapse', marginTop: '0.5rem' },
-  td: { padding: '0.5rem', borderBottom: '1px solid #f3f4f6', fontSize: '0.9rem' },
+  input: { flex: 1, padding: '0.5rem', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '0.9rem' },
   code: { background: '#f3f4f6', padding: '0.1rem 0.3rem', borderRadius: '3px' },
-  smallBtn: { padding: '0.3rem 0.6rem', background: '#f3f4f6', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' },
 }
