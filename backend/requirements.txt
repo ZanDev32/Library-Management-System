@@ -1,7 +1,8 @@
-fastapi==0.111.3
+fastapi==0.111.1
 uvicorn[standard]==0.24.0
 sqlmodel==0.0.8
-passlib[bcrypt]==1.7.4
+passlib==1.7.4
+argon2-cffi==25.1.0
 python-jose[cryptography]==3.1.0
 psycopg2-binary==2.9.10
-python-multipart==0.0.6
+python-multipart==0.0.8

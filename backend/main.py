@@ -1,8 +1,12 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from datetime import datetime, timedelta
+from typing import Optional
+
+from fastapi import Depends, FastAPI, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordBearer
+from fastapi.middleware.cors import CORSMiddleware
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlmodel import Field, Session, SQLModel, create_engine, select
@@ -12,11 +16,19 @@ JWT_SECRET = "supersecretkey_change_me"
 JWT_ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 engine = create_engine(DATABASE_URL, echo=False)
 app = FastAPI(title="Library Management System API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -96,7 +108,11 @@ class LoanRead(SQLModel):
     returned_at: Optional[datetime]
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except ValueError:
+        return False
+
 
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
@@ -175,6 +191,16 @@ def on_startup():
             session.add(student)
             session.commit()
 
+        # seed default books for demo/testing
+        if not session.exec(select(Book)).first():
+            books = [
+                Book(title="Clean Code", author="Robert C. Martin", isbn="9780132350884", published_year=2008),
+                Book(title="The Pragmatic Programmer", author="Andrew Hunt & David Thomas", isbn="9780201616224", published_year=1999),
+                Book(title="Eloquent JavaScript", author="Marijn Haverbeke", isbn="9781593279509", published_year=2018),
+            ]
+            session.add_all(books)
+            session.commit()
+
 
 @app.post("/auth/register", response_model=UserRead)
 def register(user_in: UserCreate, session: Session = Depends(get_session)):
@@ -182,9 +208,13 @@ def register(user_in: UserCreate, session: Session = Depends(get_session)):
         raise HTTPException(status_code=400, detail="Email already registered")
     if user_in.role != "student":
         raise HTTPException(status_code=400, detail="Only student registration is allowed")
+    try:
+        password_hash = get_password_hash(user_in.password)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     user = User(
         email=user_in.email,
-        password_hash=get_password_hash(user_in.password),
+        password_hash=password_hash,
         role="student",
     )
     session.add(user)
@@ -194,8 +224,25 @@ def register(user_in: UserCreate, session: Session = Depends(get_session)):
 
 
 @app.post("/auth/login", response_model=Token)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session)):
-    user = authenticate_user(session, form_data.username, form_data.password)
+async def login(request: Request, session: Session = Depends(get_session)):
+    content_type = request.headers.get("content-type", "")
+    if "application/json" in content_type:
+        body = await request.json()
+        username = body.get("username")
+        password = body.get("password")
+    else:
+        form = await request.form()
+        username = form.get("username")
+        password = form.get("password")
+
+    if not username or not password:
+        raise HTTPException(
+            status_code=400,
+            detail="Username and password are required",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    user = authenticate_user(session, username, password)
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect email or password", headers={"WWW-Authenticate": "Bearer"})
     access_token = create_access_token(data={"sub": user.email, "role": user.role})

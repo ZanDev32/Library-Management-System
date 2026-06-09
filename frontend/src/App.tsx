@@ -9,10 +9,18 @@ import { getCurrentUser } from './services/auth'
 
 function App() {
   const [user, setUser] = useState<{ email: string; role: string } | null>(null)
+  const [authLoaded, setAuthLoaded] = useState(false)
 
   useEffect(() => {
-    getCurrentUser().then((data) => setUser(data)).catch(() => setUser(null))
+    getCurrentUser()
+      .then((data) => setUser(data))
+      .catch(() => setUser(null))
+      .finally(() => setAuthLoaded(true))
   }, [])
+
+  if (!authLoaded) {
+    return <div className="app-shell">Loading...</div>
+  }
 
   return (
     <div className="app-shell">
@@ -24,7 +32,7 @@ function App() {
           <Route path="/" element={<Navigate to="/books" replace />} />
           <Route path="/login" element={<LoginPage onLogin={() => getCurrentUser().then(setUser).catch(() => setUser(null))} />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/books" element={<BooksPage user={user} />} />
+          <Route path="/books" element={user ? <BooksPage user={user} /> : <Navigate to="/login" replace />} />
           <Route path="/books/new" element={user?.role === 'librarian' ? <BookFormPage /> : <Navigate to="/login" replace />} />
           <Route path="/books/:id/edit" element={user?.role === 'librarian' ? <BookFormPage editMode /> : <Navigate to="/login" replace />} />
           <Route path="/dashboard" element={user?.role === 'librarian' ? <DashboardPage /> : <Navigate to="/login" replace />} />

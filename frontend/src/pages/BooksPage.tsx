@@ -12,10 +12,14 @@ export default function BooksPage({ user }: Props) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!user) {
+      setBooks([])
+      return
+    }
     fetchBooks()
       .then(setBooks)
       .catch(() => setError('Failed to load books.'))
-  }, [])
+  }, [user])
 
   const handleDelete = async (id: number) => {
     await deleteBook(id)
