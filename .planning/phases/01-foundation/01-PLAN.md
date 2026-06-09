@@ -2,7 +2,7 @@
 
 **Phase goal:** Stand up the project skeleton, database, and secure JWT authentication that all later features build on.
 
-**Requirements covered:** F01 (registration & login), NF02 (JWT security)
+**Requirements covered:** F01 (registration & login), NF01 (performance — under 2s), NF02 (JWT security)
 
 ## Plans
 
@@ -30,6 +30,7 @@ Recommended sequence: **1 → 2 → 3 → 4**. Plan 2 (database) can begin once 
 - [ ] A user can register and log in receiving a valid JWT (F01)
 - [ ] Protected routes reject requests without a valid token (NF02)
 - [ ] Roles distinguish students from librarians
+- [ ] Auth endpoints respond in under 2 seconds (NF01)
 - [ ] `docker compose up` brings the full stack online
 
 ## Key Decisions (from CONTEXT.md)

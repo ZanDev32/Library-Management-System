@@ -1,6 +1,6 @@
 # Phase 1 — Plan 4: Frontend Authentication & Protected Routes
 
-**Requirements:** F01 (User registration & login), NF03 (responsive)
+**Requirements:** F01 (User registration & login), NF01 (Performance — under 2s responses), NF02 (Security — JWT auth/authz)
 **Depends on:** Plan 1 (frontend scaffold), Plan 3 (auth API must exist)
 **Parallelizable:** No — needs the auth API from Plan 3
 

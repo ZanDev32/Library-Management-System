@@ -1,6 +1,6 @@
 # Phase 1 — Plan 3: Backend Authentication
 
-**Requirements:** F01 (User registration & login), NF02 (JWT security)
+**Requirements:** F01 (User registration & login), NF01 (Performance — under 2s), NF02 (JWT security)
 **Depends on:** Plan 1 (scaffold), Plan 2 (User model)
 **Parallelizable:** No — needs User model from Plan 2
 

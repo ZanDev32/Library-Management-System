@@ -4,7 +4,7 @@
 
 | Phase | Name | Focus | Requirements |
 |-------|------|-------|--------------|
-| 1 | Foundation | Auth, DB schema, project setup | F01, NF02 |
+| 1 | Foundation | Auth, DB schema, project setup | F01, NF01, NF02 |
 | 2 | Book Catalog | Search, display, CRUD | F02, F07 |
 | 3 | Borrowing System | Borrow, return, overdue | F03, F04, F05 |
 | 4 | Librarian Dashboard & Polish | Dashboard, UI, performance | F06, NF01, NF03 |
@@ -15,7 +15,7 @@
 
 **Goals:** Stand up the project skeleton, database, and a secure authentication system that all later features build on.
 
-**Requirements covered:** F01, NF02
+**Requirements covered:** F01, NF01, NF02
 
 **Deliverables:**
 - Dockerized FastAPI + React + PostgreSQL project scaffold.
@@ -27,6 +27,7 @@
 - [ ] A user can register and log in receiving a valid JWT.
 - [ ] Protected routes reject requests without a valid token.
 - [ ] Roles distinguish students from librarians.
+- [ ] Auth endpoints respond in under 2 seconds (NF01).
 - [ ] `docker compose up` brings the full stack online.
 
 ---

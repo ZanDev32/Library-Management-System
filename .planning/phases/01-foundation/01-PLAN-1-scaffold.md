@@ -1,6 +1,6 @@
 # Phase 1 — Plan 1: Project Scaffold & Docker Environment
 
-**Requirements:** Foundation (enables F01, NF02)
+**Requirements:** Foundation (enables F01, NF01, NF02)
 **Depends on:** None (first plan)
 **Parallelizable:** No — other plans depend on this scaffold
 
