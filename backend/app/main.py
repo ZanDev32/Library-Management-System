@@ -46,9 +46,10 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 
     # Routers
-    from app.routers import auth
+    from app.routers import auth, book
 
     app.include_router(auth.router, prefix="/auth", tags=["auth"])
+    app.include_router(book.router)
 
     return app
 

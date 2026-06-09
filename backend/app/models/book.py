@@ -31,3 +31,7 @@ class Book(Base):
     )
 
     borrow_records = relationship("BorrowRecord", back_populates="book")
+
+    @property
+    def available(self) -> bool:
+        return self.available_quantity > 0
